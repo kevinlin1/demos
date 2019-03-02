@@ -1,10 +1,40 @@
-import java.util.Arrays;
-
-import java.util.stream.Collectors;
-
 public class HeapMaxPQ<Item extends Comparable<Item>> implements MaxPQ<Item> {
     private Item[] items;
     private int size;
+
+    @SuppressWarnings("unchecked")
+    public HeapMaxPQ() {
+        items = (Item[]) new Comparable[100]; // no resizing
+        size = 0;
+    }
+
+    public int parent(int i) {
+        return (i - 1) / 2;
+    }
+
+    public int leftChild(int i) {
+        return i * 2 + 1;
+    }
+
+    public int rightChild(int i) {
+        return i * 2 + 2;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public Item max() {
+        return items[0];
+    }
+
+    public Item removeMax() {
+        // Swap the root with the last leaf.
+        // Remove the max (now the last leaf).
+        // Sink the new root to its proper place, promoting the larger child.
+    }
+
+    // Other methods will be implemented in lab!
 
     public static void main(String[] args) {
         MaxPQ<TwitterTopic> trending = new HeapMaxPQ<>();
@@ -19,12 +49,6 @@ public class HeapMaxPQ<Item extends Comparable<Item>> implements MaxPQ<Item> {
         System.out.println("max: " + trending.max());
     }
 
-    @SuppressWarnings("unchecked")
-    public HeapMaxPQ() {
-        items = (Item[]) new Comparable[100]; // no resizing
-        size = 0;
-    }
-
     public void add(Item x) {
         if (x == null) {
             throw new IllegalArgumentException("Cannot add null item");
@@ -32,19 +56,6 @@ public class HeapMaxPQ<Item extends Comparable<Item>> implements MaxPQ<Item> {
         items[size] = x;
         swim(size);
         size += 1;
-    }
-
-    public Item max() {
-        return items[0];
-    }
-
-    public Item removeMax() {
-        Item max = items[0];
-        items[0] = items[size - 1];
-        items[size - 1] = null;
-        size -= 1;
-        sink(0);
-        return max;
     }
 
     public void swim(int i) {
@@ -89,29 +100,5 @@ public class HeapMaxPQ<Item extends Comparable<Item>> implements MaxPQ<Item> {
         } else {
             return one.compareTo(two) >= 0;
         }
-    }
-
-    public int parent(int i) {
-        return (i - 1) / 2;
-    }
-
-    public int leftChild(int i) {
-        return i * 2 + 1;
-    }
-
-    public int rightChild(int i) {
-        return i * 2 + 2;
-    }
-
-    public int size() {
-        return size;
-    }
-
-    public String toString() {
-        return "{" +
-            Arrays.stream(items).limit(size)
-                                .map(Object::toString)
-                                .collect(Collectors.joining(",\n "))
-            + "}";
     }
 }
