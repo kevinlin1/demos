@@ -42,8 +42,8 @@ public class HeapMaxPQ<Item extends Comparable<Item>> implements MaxPQ<Item> {
         Item max = items[0];
         items[0] = items[size - 1];
         items[size - 1] = null;
-        sink(0);
         size -= 1;
+        sink(0);
         return max;
     }
 
